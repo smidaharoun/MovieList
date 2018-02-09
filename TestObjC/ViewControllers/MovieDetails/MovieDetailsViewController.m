@@ -2,7 +2,7 @@
 //  MovieDetailsViewController.m
 //  TestObjC
 //
-//  Created by ODC on 2/8/18.
+//  Created by Haroun SMIDA on 2/8/18.
 //  Copyright © 2018 sonic. All rights reserved.
 //
 
@@ -15,10 +15,14 @@
 
 @implementation MovieDetailsViewController
 
+#pragma mark View controller methods
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadData];
 }
+
+#pragma mark Handling Data
 
 - (void)loadData {
     self.title = _data.title;

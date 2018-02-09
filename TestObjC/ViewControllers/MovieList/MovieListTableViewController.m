@@ -2,7 +2,7 @@
 //  MovieListTableViewController.m
 //  TestObjC
 //
-//  Created by ODC on 2/8/18.
+//  Created by Haroun SMIDA on 2/8/18.
 //  Copyright © 2018 sonic. All rights reserved.
 //
 
@@ -20,7 +20,11 @@
 
 @implementation MovieListTableViewController
 
+#pragma mark Global variables
+
 NSInteger lastExtendedRow = -1;
+
+#pragma mark View controller methods
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,11 +32,15 @@ NSInteger lastExtendedRow = -1;
     [self loadData];
 }
 
+#pragma mark Initialization
+
 - (void)initializeViews {
     self.title = @"Star Wars";
     [self.navigationController.navigationBar setTranslucent:false];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
+
+#pragma mark Handle Data
 
 - (void)loadData {
     [APIManager getMovies:^(NSArray *response) {
@@ -56,7 +64,7 @@ NSInteger lastExtendedRow = -1;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (lastExtendedRow == indexPath.row) {
-        return 150 + [[_data[indexPath.row] intro] heightWithConstrainedWidth:self.view.frame.size.height - 118 font:[UIFont systemFontOfSize:13]] - 51;
+        return 150 + [[_data[indexPath.row] intro] heightWithConstrainedWidth:self.view.frame.size.width - 118 font:[UIFont systemFontOfSize:13]] - 51;
     }
     return 150;
 }
@@ -80,11 +88,15 @@ NSInteger lastExtendedRow = -1;
     return cell;
 }
 
+#pragma mark - Table view delegate
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MovieDetailsViewController* viewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([MovieDetailsViewController class])];
     viewController.data = _data[indexPath.row];
     [self.navigationController pushViewController:viewController animated:true];
 }
+
+#pragma mark - IBActions
 
 - (void)seeMoreAction:(UIButton*)sender {
     MovieTableViewCell* cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
@@ -94,9 +106,11 @@ NSInteger lastExtendedRow = -1;
         angle = 0;
     } else {
         MovieTableViewCell* previousCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:lastExtendedRow inSection:0]];
-        [UIView animateWithDuration:0.2 animations:^{
-            previousCell.seeMoreButton.transform = CGAffineTransformMakeRotation(0);
-        }];
+        if (previousCell) {
+            [UIView animateWithDuration:0.2 animations:^{
+                previousCell.seeMoreButton.transform = CGAffineTransformMakeRotation(0);
+            }];
+        }
         lastExtendedRow = sender.tag;
     }
     [UIView animateWithDuration:0.2 animations:^{
